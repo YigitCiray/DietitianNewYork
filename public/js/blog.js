@@ -81,6 +81,7 @@ async function fetchBlogPosts() {
                         date: frontmatter.date || '',
                         excerpt: frontmatter.excerpt || '',
                         category: frontmatter.category || 'Nutrition',
+                        thumbnail: frontmatter.thumbnail || frontmatter.image || '',
                         content: content,
                         markdown: markdown
                     };
@@ -128,6 +129,7 @@ async function fetchLocalBlogPosts() {
                         date: frontmatter.date || '',
                         excerpt: frontmatter.excerpt || '',
                         category: frontmatter.category || 'Nutrition',
+                        thumbnail: frontmatter.thumbnail || frontmatter.image || '',
                         content: content,
                         markdown: markdown
                     };
@@ -201,6 +203,13 @@ async function renderBlogListing() {
         
         container.innerHTML = posts.map(post => `
             <article class="blog-card">
+                ${post.thumbnail ? `
+                    <div class="blog-card-image">
+                        <a href="blog-post.html?slug=${post.slug}">
+                            <img src="${post.thumbnail}" alt="${post.title}" loading="lazy">
+                        </a>
+                    </div>
+                ` : ''}
                 <div class="blog-card-content">
                     <div class="blog-meta">
                         <span class="blog-date">${formatDate(post.date)}</span>
@@ -250,6 +259,11 @@ async function renderBlogPost() {
         
         container.innerHTML = `
             <article class="blog-post">
+                ${post.thumbnail ? `
+                    <div class="blog-post-image">
+                        <img src="${post.thumbnail}" alt="${post.title}" loading="lazy">
+                    </div>
+                ` : ''}
                 <div class="blog-post-header">
                     <div class="blog-post-meta">
                         <span class="blog-date">${formatDate(post.date)}</span>
@@ -293,15 +307,24 @@ async function renderBlogPreview() {
             <div class="blog-preview-grid">
                 ${recentPosts.map(post => `
                     <div class="blog-preview-card">
-                        <div class="blog-preview-meta">
-                            <span class="blog-date">${formatDate(post.date)}</span>
-                            <span class="blog-category">${post.category}</span>
+                        ${post.thumbnail ? `
+                            <div class="blog-preview-image">
+                                <a href="blog-post.html?slug=${post.slug}">
+                                    <img src="${post.thumbnail}" alt="${post.title}" loading="lazy">
+                                </a>
+                            </div>
+                        ` : ''}
+                        <div class="blog-preview-content">
+                            <div class="blog-preview-meta">
+                                <span class="blog-date">${formatDate(post.date)}</span>
+                                <span class="blog-category">${post.category}</span>
+                            </div>
+                            <h3 class="blog-preview-title">
+                                <a href="blog-post.html?slug=${post.slug}">${post.title}</a>
+                            </h3>
+                            <p class="blog-preview-excerpt">${post.excerpt}</p>
+                            <a href="blog-post.html?slug=${post.slug}" class="blog-preview-link">Read More →</a>
                         </div>
-                        <h3 class="blog-preview-title">
-                            <a href="blog-post.html?slug=${post.slug}">${post.title}</a>
-                        </h3>
-                        <p class="blog-preview-excerpt">${post.excerpt}</p>
-                        <a href="blog-post.html?slug=${post.slug}" class="blog-preview-link">Read More →</a>
                     </div>
                 `).join('')}
             </div>

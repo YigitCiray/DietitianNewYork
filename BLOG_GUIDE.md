@@ -46,6 +46,7 @@ category: Pregnancy Nutrition
 - **date** (required): Publication date in `YYYY-MM-DD` format
 - **excerpt** (required): Short description (1-2 sentences) shown in blog listings
 - **category** (optional): Category name (e.g., "Pregnancy Nutrition", "Family Health", "Recipes")
+- **thumbnail** (optional): Path to thumbnail image (e.g., `images/thumbnail.jpg`). Image should be in `public/images/` folder. Recommended size: 1200x630px.
 
 ### Content Section
 
@@ -57,6 +58,7 @@ title: Your Blog Post Title
 date: 2024-12-27
 excerpt: Brief description
 category: Pregnancy Nutrition
+thumbnail: images/your-image.jpg
 ---
 
 # Your Main Heading
@@ -218,6 +220,18 @@ git commit -m "Add blog post: Your Title"
 git push origin main
 ```
 
+## Adding Thumbnail Images
+
+1. **Add your image** to the `public/images/` folder
+2. **Reference it in frontmatter**:
+   ```markdown
+   thumbnail: images/your-image.jpg
+   ```
+3. **Image path** should be relative to the `public/` folder
+4. **Recommended size**: 1200x630px (or similar aspect ratio)
+5. **Supported formats**: JPG, PNG, WebP
+6. **Optional**: If you don't include a thumbnail, the post will display without an image
+
 ## Tips for Great Blog Posts
 
 1. **Write Clear Titles**: Make titles descriptive and search-friendly
@@ -226,6 +240,7 @@ git push origin main
 4. **Add Examples**: Include practical examples and tips
 5. **Use Lists**: Bullet points make content scannable
 6. **Include Disclaimers**: Add medical disclaimers when appropriate
+7. **Add Thumbnails**: Visual thumbnails make posts more engaging in listings
 
 ## Troubleshooting
 

@@ -3,6 +3,7 @@ title: Folate vs. Folic Acid: Understanding the Difference
 date: 2024-12-28
 excerpt: Learn the important distinction between folate and folic acid, and why it matters for your pregnancy nutrition.
 category: Pregnancy Nutrition
+thumbnail: images/IMG_4006.jpg
 ---
 
 # Folate vs. Folic Acid: Understanding the Difference

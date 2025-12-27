@@ -3,6 +3,7 @@ title: Probiotics During Pregnancy: What You Need to Know
 date: 2024-12-27
 excerpt: Understanding the safety and benefits of probiotics during pregnancy, including which strains are best supported by research.
 category: Pregnancy Nutrition
+thumbnail: images/IMG_4006.jpg
 ---
 
 # Probiotics During Pregnancy: What You Need to Know
