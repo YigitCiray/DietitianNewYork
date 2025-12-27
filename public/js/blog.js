@@ -21,10 +21,13 @@ function parseFrontmatter(content) {
     const frontmatter = {};
     
     frontmatterText.split('\n').forEach(line => {
-        const colonIndex = line.indexOf(':');
+        const trimmedLine = line.trim();
+        if (!trimmedLine) return;
+        
+        const colonIndex = trimmedLine.indexOf(':');
         if (colonIndex > 0) {
-            const key = line.substring(0, colonIndex).trim();
-            const value = line.substring(colonIndex + 1).trim().replace(/^["']|["']$/g, '');
+            const key = trimmedLine.substring(0, colonIndex).trim();
+            const value = trimmedLine.substring(colonIndex + 1).trim().replace(/^["']|["']$/g, '');
             frontmatter[key] = value;
         }
     });
@@ -74,9 +77,6 @@ async function fetchBlogPosts() {
                     const markdown = await postResponse.text();
                     const { frontmatter, content } = parseFrontmatter(markdown);
                     
-                    // Debug: log frontmatter to see what's being parsed
-                    console.log('Parsed frontmatter for', file.name, ':', frontmatter);
-                    
                     return {
                         slug: getSlug(file.name),
                         filename: file.name,
@@ -84,7 +84,7 @@ async function fetchBlogPosts() {
                         date: frontmatter.date || '',
                         excerpt: frontmatter.excerpt || '',
                         category: frontmatter.category || 'Nutrition',
-                        thumbnail: frontmatter.thumbnail || frontmatter.image || '',
+                        thumbnail: (frontmatter.thumbnail || frontmatter.image || '').trim(),
                         content: content,
                         markdown: markdown
                     };
@@ -125,8 +125,8 @@ async function fetchLocalBlogPosts() {
                     const markdown = await postResponse.text();
                     const { frontmatter, content } = parseFrontmatter(markdown);
                     
-                    // Debug: log frontmatter to see what's being parsed
-                    console.log('Parsed frontmatter for', item.filename, ':', frontmatter);
+                    const thumbnail = (frontmatter.thumbnail || frontmatter.image || '').trim();
+                    console.log('Local post:', item.filename, '| Thumbnail field:', frontmatter.thumbnail, '| Final thumbnail:', thumbnail);
                     
                     return {
                         slug: item.slug,
@@ -135,7 +135,7 @@ async function fetchLocalBlogPosts() {
                         date: frontmatter.date || '',
                         excerpt: frontmatter.excerpt || '',
                         category: frontmatter.category || 'Nutrition',
-                        thumbnail: frontmatter.thumbnail || frontmatter.image || '',
+                        thumbnail: thumbnail,
                         content: content,
                         markdown: markdown
                     };
@@ -207,14 +207,12 @@ async function renderBlogListing() {
             return;
         }
         
-        container.innerHTML = posts.map(post => {
-            console.log('Rendering blog card for:', post.title, 'Thumbnail:', post.thumbnail);
-            return `
+        container.innerHTML = posts.map(post => `
             <article class="blog-card">
                 ${post.thumbnail ? `
                     <div class="blog-card-image">
                         <a href="blog-post.html?slug=${post.slug}">
-                            <img src="${post.thumbnail}" alt="${post.title}" loading="lazy" onerror="console.error('Failed to load image:', this.src)">
+                            <img src="${post.thumbnail}" alt="${post.title}" loading="lazy">
                         </a>
                     </div>
                 ` : ''}
@@ -230,8 +228,7 @@ async function renderBlogListing() {
                     <a href="blog-post.html?slug=${post.slug}" class="blog-read-more">Read More →</a>
                 </div>
             </article>
-        `;
-        }).join('');
+        `).join('');
     } catch (error) {
         console.error('Error loading blog posts:', error);
         container.innerHTML = '<p class="no-posts">Unable to load blog posts at this time. Please try again later.</p>';
@@ -264,14 +261,13 @@ async function renderBlogPost() {
         document.title = `${post.title} | Dietitian New York`;
         
         // Render post
-        console.log('Rendering blog post:', post.title, 'Thumbnail:', post.thumbnail);
         const htmlContent = markdownToHTML(post.content);
         
         container.innerHTML = `
             <article class="blog-post">
                 ${post.thumbnail ? `
                     <div class="blog-post-image">
-                        <img src="${post.thumbnail}" alt="${post.title}" loading="lazy" onerror="console.error('Failed to load image:', this.src)">
+                        <img src="${post.thumbnail}" alt="${post.title}" loading="lazy">
                     </div>
                 ` : ''}
                 <div class="blog-post-header">
@@ -315,14 +311,12 @@ async function renderBlogPreview() {
         
         container.innerHTML = `
             <div class="blog-preview-grid">
-                ${recentPosts.map(post => {
-                    console.log('Rendering blog preview for:', post.title, 'Thumbnail:', post.thumbnail);
-                    return `
+                ${recentPosts.map(post => `
                     <div class="blog-preview-card">
                         ${post.thumbnail ? `
                             <div class="blog-preview-image">
                                 <a href="blog-post.html?slug=${post.slug}">
-                                    <img src="${post.thumbnail}" alt="${post.title}" loading="lazy" onerror="console.error('Failed to load image:', this.src)">
+                                    <img src="${post.thumbnail}" alt="${post.title}" loading="lazy">
                                 </a>
                             </div>
                         ` : ''}
@@ -338,8 +332,7 @@ async function renderBlogPreview() {
                             <a href="blog-post.html?slug=${post.slug}" class="blog-preview-link">Read More →</a>
                         </div>
                     </div>
-                `;
-                }).join('')}
+                `).join('')}
             </div>
             <div class="blog-preview-cta">
                 <a href="blog.html" class="cta-secondary">View All Blog Posts</a>
