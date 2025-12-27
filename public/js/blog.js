@@ -84,7 +84,7 @@ async function fetchBlogPosts() {
                         date: frontmatter.date || '',
                         excerpt: frontmatter.excerpt || '',
                         category: frontmatter.category || 'Nutrition',
-                        thumbnail: (frontmatter.thumbnail || frontmatter.image || '').trim(),
+                        thumbnail: (frontmatter.thumbnail || frontmatter.image || '').trim().replace(/^images\//, '/images/'),
                         content: content,
                         markdown: markdown
                     };
@@ -125,8 +125,7 @@ async function fetchLocalBlogPosts() {
                     const markdown = await postResponse.text();
                     const { frontmatter, content } = parseFrontmatter(markdown);
                     
-                    const thumbnail = (frontmatter.thumbnail || frontmatter.image || '').trim();
-                    console.log('Local post:', item.filename, '| Thumbnail field:', frontmatter.thumbnail, '| Final thumbnail:', thumbnail);
+                    const thumbnail = (frontmatter.thumbnail || frontmatter.image || '').trim().replace(/^images\//, '/images/');
                     
                     return {
                         slug: item.slug,
