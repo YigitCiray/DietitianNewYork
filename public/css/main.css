@@ -233,6 +233,147 @@ h1 {
     display: block;
 }
 
+/* About Page */
+.about-hero {
+    padding: 3rem 0;
+    background: var(--bg-light);
+}
+
+.about-content {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 3rem;
+    align-items: start;
+}
+
+.about-image {
+    text-align: center;
+}
+
+.about-photo {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    display: block;
+    margin: 0 auto;
+}
+
+.about-text h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+}
+
+.about-text .intro-text {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: var(--text-dark);
+    margin-top: 1rem;
+}
+
+.story,
+.approach-section,
+.specialties,
+.credentials-section {
+    padding: 3rem 0;
+}
+
+.story {
+    background: var(--bg-warm);
+}
+
+.approach-section {
+    background: var(--bg-light);
+}
+
+.specialties {
+    background: var(--bg-warm);
+}
+
+.credentials-section {
+    background: var(--bg-light);
+}
+
+.story-text {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: var(--text-dark);
+    max-width: 800px;
+    margin: 0 auto 1.5rem;
+}
+
+.philosophy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.philosophy-card {
+    background: var(--bg-warm);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 2px solid var(--border-color);
+    transition: all 0.2s;
+}
+
+.philosophy-card:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.philosophy-card h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+}
+
+.specialty-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.specialty-item {
+    background: var(--bg-warm);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 2px solid var(--border-color);
+}
+
+.specialty-item h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+}
+
+.credentials-list {
+    list-style: none;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.credentials-list li {
+    padding: 1rem;
+    margin: 0.5rem 0;
+    background: var(--bg-warm);
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+    line-height: 1.6;
+}
+
+.credentials-list strong {
+    color: var(--primary-color);
+}
+
 .meet-text h2 {
     font-size: 2rem;
     margin-bottom: 0.5rem;
@@ -970,19 +1111,27 @@ h2 {
         grid-template-columns: 1fr;
     }
 
-    .meet-content {
+    .meet-content,
+    .about-content {
         grid-template-columns: 1fr;
         gap: 2rem;
         text-align: center;
     }
 
-    .meet-photo {
+    .meet-photo,
+    .about-photo {
         max-width: 250px;
         margin: 0 auto;
     }
 
-    .meet-text h2 {
+    .meet-text h2,
+    .about-text h1 {
         text-align: center;
+    }
+
+    .philosophy-grid,
+    .specialty-list {
+        grid-template-columns: 1fr;
     }
 
     .quote {

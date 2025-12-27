@@ -1,264 +1,129 @@
-# Dietitian Website - Professional Nutrition Services
+# Dietitian New York - Static Website
 
-A clean, biography-style website for a registered dietitian offering one-on-one nutrition consultations with integrated online booking and payment processing.
+A clean, professional static website for Merve Ciray, MS, RDN, CDN - Registered Dietitian in New York, offering personalized nutrition consultation programs.
 
 ## 🌿 Overview
 
-This website provides:
+This is a static website that provides:
 - Professional biography and credentials showcase
-- Service offerings and pricing
-- Online consultation booking system
-- Secure payment processing via Stripe
-- Intake questionnaire and client management
-- Resource library for nutrition information
-- Client testimonials and success stories
+- Consultation program information (3-month and 6-month programs)
+- Direct Stripe payment links for program purchases
+- Calendly integration for discovery calls
+- Clean, modern design with Playfair Display and Inter fonts
 
 ## 🎯 Key Features
 
 ### Professional Design
 - Clean, trustworthy, and professional aesthetic
 - Personal connection through biography and story
-- Trust-building through credentials and client testimonials
-- Focus on New York market
+- Trust-building through credentials
+- Soft sage green and terracotta color palette
 
-### Online Booking & Sales
-- Program selection (3-month or 6-month)
-- Free discovery call scheduling
-- Secure payment processing
-- Email confirmation system
-- Google Calendar integration
-
-### Client Management
-- Google Sheets for data storage
-- Intake questionnaire
-- Booking tracking
-- Payment records
+### Payment Integration
+- Direct Stripe payment links for 3-month and 6-month programs
+- No backend required - simple and secure
+- Calendly integration for free discovery calls
 
 ## 🏗️ Tech Stack
 
-### Backend
-- **Runtime:** Node.js 18+
-- **Framework:** Express.js
-- **Payment:** Stripe API
-- **Storage:** Google Sheets API
-- **Calendar:** Google Calendar API
-- **Email:** SendGrid
-
-### Frontend
+### Frontend Only
 - **Markup:** HTML5
 - **Styling:** CSS3
-- **JavaScript:** Vanilla JavaScript
-- **Design:** Clean, biography-focused layout
-
-### Deployment
-- **Container:** Docker (Alpine Linux)
-- **Platform:** Google Cloud Run
-- **Infrastructure:** Terraform
-- **Port:** 8080
+- **JavaScript:** Vanilla JavaScript (minimal)
+- **Fonts:** Playfair Display (headings), Inter (body)
+- **Payment:** Stripe Payment Links (direct links)
 
 ## 📁 Project Structure
 
 ```
-dietitian-website/
-├── server/              # Express backend
-│   ├── index.js        # Server entry point
-│   ├── routes/         # API and page routes
-│   └── config/         # Service configurations
-├── public/             # Frontend files
+dietitian-new-york/
+├── public/             # All website files
 │   ├── index.html      # Homepage
 │   ├── about.html      # About page
-│   ├── services.html   # Services page
-│   ├── book.html       # Booking page
-│   ├── css/            # Stylesheets
-│   └── js/             # JavaScript files
-├── terraform/          # Infrastructure as Code
-├── Dockerfile          # Container configuration
-└── package.json        # Dependencies
+│   ├── css/
+│   │   └── main.css    # Main stylesheet
+│   ├── js/
+│   │   └── main.js     # Main JavaScript
+│   └── images/         # Images
+├── package.json        # Minimal package.json
+└── README.md           # This file
 ```
 
-## 🚀 Getting Started
+## 🚀 Deployment
 
-### Prerequisites
+This is a static website and can be deployed to any static hosting service:
 
-- Node.js 18 or higher
-- Docker (for containerization)
-- Google Cloud account
-- Stripe account
+### Option 1: GitHub Pages (Free)
+1. Push code to GitHub repository
+2. Go to Settings → Pages
+3. Select branch and folder (`/public` or root)
+4. Your site will be live at `username.github.io/repository-name`
 
-### Installation
+### Option 2: Netlify (Free)
+1. Drag and drop the `public` folder to Netlify
+2. Or connect your GitHub repository
+3. Automatic HTTPS and custom domain support
 
-1. **Clone the repository**
+### Option 3: Vercel (Free)
+1. Connect GitHub repository
+2. Vercel auto-detects static site
+3. Automatic deployments on push
+
+### Option 4: Any Static Host
+- AWS S3 + CloudFront
+- Google Cloud Storage
+- Azure Static Web Apps
+- Cloudflare Pages
+
+## 📝 Setup Instructions
+
+### Local Development
+1. Simply open `public/index.html` in a browser
+2. Or use a local server:
    ```bash
-   git clone <repository-url>
-   cd dietitian-website
+   # Python
+   cd public && python -m http.server 8000
+   
+   # Node.js (if you have http-server installed)
+   npx http-server public -p 8000
    ```
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+### Before Deploying
+1. **Update Stripe Payment Links:**
+   - Replace `https://buy.stripe.com/YOUR_3MONTH_LINK` in `public/index.html`
+   - Replace `https://buy.stripe.com/YOUR_6MONTH_LINK` in `public/index.html`
+   - Get your payment links from Stripe Dashboard → Products → Payment Links
 
-3. **Set up environment variables**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your credentials
-   ```
+2. **Update Calendly Link:**
+   - Update the Calendly discovery call link if needed
+   - Currently: `https://calendly.com/dietitiannewyork/15min?back=1&month=2025-12`
 
-4. **Run locally**
-   ```bash
-   npm run dev
-   ```
-
-   Visit `http://localhost:8080`
-
-### Required Environment Variables
-
-Create a `.env` file with:
-
-```env
-# Server
-NODE_ENV=development
-PORT=8080
-FRONTEND_URL=http://localhost:8080
-
-# Stripe
-STRIPE_SECRET_KEY=sk_test_...
-STRIPE_WEBHOOK_SECRET=whsec_...
-
-# Google APIs
-GOOGLE_APPLICATION_CREDENTIALS=./config/google-credentials.json
-GOOGLE_SHEETS_SHEET_ID=...
-GOOGLE_CALENDAR_ID=...
-
-# Email
-SENDGRID_API_KEY=...
-```
-
-## 📝 Documentation
-
-- [WEBSITE_PLAN.md](./WEBSITE_PLAN.md) - Complete website strategy and content plan
-- [SAMPLE_CONTENT.md](./SAMPLE_CONTENT.md) - Ready-to-use content examples
+3. **Custom Domain (Optional):**
+   - Configure DNS settings with your hosting provider
+   - Update any hardcoded URLs if needed
 
 ## 🎨 Customization
 
-### Content Updates
+### Colors
+Colors are defined in `public/css/main.css`:
+- Primary: Soft Sage Green `#7FA8A1`
+- Primary Dark: Deep Sage Green `#5F7F73`
+- Secondary: Warm Clay/Terracotta `#C97A63`
+- Text: Charcoal `#2F2F2F`
+- Background: Creamy Off-White `#FAF7F3`
 
-1. **Replace placeholders** in `SAMPLE_CONTENT.md` with your information:
-   - Your name and credentials
-   - Years of experience
-   - Consultation pricing
-   - Testimonials (gather from real clients)
+### Fonts
+- Headlines: Playfair Display (loaded from Google Fonts)
+- Body: Inter (loaded from Google Fonts)
 
-2. **Update HTML pages** in `public/` folder:
-   - `index.html` - Homepage content
-   - `about.html` - Biography (needs to be created)
-   - `services.html` - Service details (needs to be created)
-   - `book.html` - Booking form
+## 📞 Contact
 
-3. **Add professional photos:**
-   - Replace placeholder in hero section
-   - Add headshot to About page
-   - Consider adding office photos or food photography
-
-### Styling
-
-Modify `public/css/main.css`:
-- Color scheme (CSS variables in `:root`)
-- Typography
-- Layout spacing
-- Component styles
-
-## 🧪 Testing
-
-```bash
-# Run development server
-npm run dev
-
-# Test booking flow
-# Use Stripe test mode: https://stripe.com/docs/testing
-```
-
-## 🐳 Docker
-
-### Build Image
-```bash
-docker build -t dietitian-website .
-```
-
-### Run Container
-```bash
-docker run -p 8080:8080 --env-file .env dietitian-website
-```
-
-## ☁️ Deployment
-
-### Deploy to Google Cloud Run
-
-1. **Build and push container:**
-   ```bash
-   gcloud builds submit --tag gcr.io/YOUR_PROJECT/dietitian-website
-   ```
-
-2. **Deploy:**
-   ```bash
-   gcloud run deploy dietitian-website \
-     --image gcr.io/YOUR_PROJECT/dietitian-website \
-     --platform managed \
-     --region us-central1 \
-     --allow-unauthenticated
-   ```
-
-## 🔐 Security & Compliance
-
-### HIPAA Considerations
-- Use HTTPS in production
-- Secure API keys via environment variables
-- Implement Business Associate Agreements (BAAs) with:
-  - Stripe
-  - SendGrid
-  - Google (Sheets/Calendar)
-- Client data encryption
-- Access controls and logging
-
-### Required Disclaimers
-- Medical disclaimer (not diagnosing or treating)
-- Professional licensing information
-- Privacy policy
-- Terms of service
-- Refund policy
-
-## 📊 Features to Implement
-
-### Completed
-- ✅ Basic page structure
-- ✅ Booking form
-- ✅ Stripe payment integration
-- ✅ Navigation and layout
-- ✅ Biography-style design
-
-### To Build
-- [ ] About page with full biography
-- [ ] Services page with detailed offerings
-- [ ] Resources page with articles/recipes
-- [ ] Testimonials page
-- [ ] Google Calendar integration
-- [ ] Email confirmations
-- [ ] Client intake form
-- [ ] Admin dashboard for bookings
-- [ ] Analytics integration
-
-## 📞 Support
-
-For questions or issues, refer to:
-- Website plan documentation
-- Sample content guide
-- Stripe documentation: https://stripe.com/docs
-- Google APIs documentation
+For questions about the website, contact: hello@dietitiannewyork.com
 
 ## 📄 License
 
-MIT License - see LICENSE file for details
+MIT License
 
 ---
 
-**Ready to launch?** Customize the content, set up your integrations, and deploy to start accepting bookings!
+**Note:** This is a static website. All payment processing is handled directly through Stripe Payment Links - no backend server required.
