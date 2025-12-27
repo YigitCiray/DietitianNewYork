@@ -74,6 +74,9 @@ async function fetchBlogPosts() {
                     const markdown = await postResponse.text();
                     const { frontmatter, content } = parseFrontmatter(markdown);
                     
+                    // Debug: log frontmatter to see what's being parsed
+                    console.log('Parsed frontmatter for', file.name, ':', frontmatter);
+                    
                     return {
                         slug: getSlug(file.name),
                         filename: file.name,
@@ -121,6 +124,9 @@ async function fetchLocalBlogPosts() {
                     }
                     const markdown = await postResponse.text();
                     const { frontmatter, content } = parseFrontmatter(markdown);
+                    
+                    // Debug: log frontmatter to see what's being parsed
+                    console.log('Parsed frontmatter for', item.filename, ':', frontmatter);
                     
                     return {
                         slug: item.slug,
@@ -201,12 +207,14 @@ async function renderBlogListing() {
             return;
         }
         
-        container.innerHTML = posts.map(post => `
+        container.innerHTML = posts.map(post => {
+            console.log('Rendering blog card for:', post.title, 'Thumbnail:', post.thumbnail);
+            return `
             <article class="blog-card">
                 ${post.thumbnail ? `
                     <div class="blog-card-image">
                         <a href="blog-post.html?slug=${post.slug}">
-                            <img src="${post.thumbnail}" alt="${post.title}" loading="lazy">
+                            <img src="${post.thumbnail}" alt="${post.title}" loading="lazy" onerror="console.error('Failed to load image:', this.src)">
                         </a>
                     </div>
                 ` : ''}
@@ -222,7 +230,8 @@ async function renderBlogListing() {
                     <a href="blog-post.html?slug=${post.slug}" class="blog-read-more">Read More →</a>
                 </div>
             </article>
-        `).join('');
+        `;
+        }).join('');
     } catch (error) {
         console.error('Error loading blog posts:', error);
         container.innerHTML = '<p class="no-posts">Unable to load blog posts at this time. Please try again later.</p>';
@@ -255,13 +264,14 @@ async function renderBlogPost() {
         document.title = `${post.title} | Dietitian New York`;
         
         // Render post
+        console.log('Rendering blog post:', post.title, 'Thumbnail:', post.thumbnail);
         const htmlContent = markdownToHTML(post.content);
         
         container.innerHTML = `
             <article class="blog-post">
                 ${post.thumbnail ? `
                     <div class="blog-post-image">
-                        <img src="${post.thumbnail}" alt="${post.title}" loading="lazy">
+                        <img src="${post.thumbnail}" alt="${post.title}" loading="lazy" onerror="console.error('Failed to load image:', this.src)">
                     </div>
                 ` : ''}
                 <div class="blog-post-header">
@@ -305,12 +315,14 @@ async function renderBlogPreview() {
         
         container.innerHTML = `
             <div class="blog-preview-grid">
-                ${recentPosts.map(post => `
+                ${recentPosts.map(post => {
+                    console.log('Rendering blog preview for:', post.title, 'Thumbnail:', post.thumbnail);
+                    return `
                     <div class="blog-preview-card">
                         ${post.thumbnail ? `
                             <div class="blog-preview-image">
                                 <a href="blog-post.html?slug=${post.slug}">
-                                    <img src="${post.thumbnail}" alt="${post.title}" loading="lazy">
+                                    <img src="${post.thumbnail}" alt="${post.title}" loading="lazy" onerror="console.error('Failed to load image:', this.src)">
                                 </a>
                             </div>
                         ` : ''}
@@ -326,7 +338,8 @@ async function renderBlogPreview() {
                             <a href="blog-post.html?slug=${post.slug}" class="blog-preview-link">Read More →</a>
                         </div>
                     </div>
-                `).join('')}
+                `;
+                }).join('')}
             </div>
             <div class="blog-preview-cta">
                 <a href="blog.html" class="cta-secondary">View All Blog Posts</a>
