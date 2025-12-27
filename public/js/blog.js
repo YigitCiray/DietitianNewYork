@@ -191,28 +191,33 @@ async function renderBlogListing() {
     
     container.innerHTML = '<div class="loading">Loading blog posts...</div>';
     
-    const posts = await fetchBlogPosts();
-    
-    if (posts.length === 0) {
-        container.innerHTML = '<p class="no-posts">No blog posts found. Check back soon!</p>';
-        return;
-    }
-    
-    container.innerHTML = posts.map(post => `
-        <article class="blog-card">
-            <div class="blog-card-content">
-                <div class="blog-meta">
-                    <span class="blog-date">${formatDate(post.date)}</span>
-                    <span class="blog-category">${post.category}</span>
+    try {
+        const posts = await fetchBlogPosts();
+        
+        if (posts.length === 0) {
+            container.innerHTML = '<p class="no-posts">No blog posts found. Check back soon!</p>';
+            return;
+        }
+        
+        container.innerHTML = posts.map(post => `
+            <article class="blog-card">
+                <div class="blog-card-content">
+                    <div class="blog-meta">
+                        <span class="blog-date">${formatDate(post.date)}</span>
+                        <span class="blog-category">${post.category}</span>
+                    </div>
+                    <h2 class="blog-title">
+                        <a href="blog-post.html?slug=${post.slug}">${post.title}</a>
+                    </h2>
+                    <p class="blog-excerpt">${post.excerpt}</p>
+                    <a href="blog-post.html?slug=${post.slug}" class="blog-read-more">Read More →</a>
                 </div>
-                <h2 class="blog-title">
-                    <a href="blog-post.html?slug=${post.slug}">${post.title}</a>
-                </h2>
-                <p class="blog-excerpt">${post.excerpt}</p>
-                <a href="blog-post.html?slug=${post.slug}" class="blog-read-more">Read More →</a>
-            </div>
-        </article>
-    `).join('');
+            </article>
+        `).join('');
+    } catch (error) {
+        console.error('Error loading blog posts:', error);
+        container.innerHTML = '<p class="no-posts">Unable to load blog posts at this time. Please try again later.</p>';
+    }
 }
 
 // Render blog post detail
@@ -220,43 +225,50 @@ async function renderBlogPost() {
     const urlParams = new URLSearchParams(window.location.search);
     const slug = urlParams.get('slug');
     
-    if (!slug) {
-        document.getElementById('blog-post-content').innerHTML = '<p>Post not found.</p>';
-        return;
-    }
-    
-    const posts = await fetchBlogPosts();
-    const post = posts.find(p => p.slug === slug);
-    
-    if (!post) {
-        document.getElementById('blog-post-content').innerHTML = '<p>Post not found.</p>';
-        return;
-    }
-    
-    // Update page title
-    document.title = `${post.title} | Dietitian New York`;
-    
-    // Render post
     const container = document.getElementById('blog-post-content');
-    const htmlContent = markdownToHTML(post.content);
+    if (!container) return;
     
-    container.innerHTML = `
-        <article class="blog-post">
-            <div class="blog-post-header">
-                <div class="blog-post-meta">
-                    <span class="blog-date">${formatDate(post.date)}</span>
-                    <span class="blog-category">${post.category}</span>
+    if (!slug) {
+        container.innerHTML = '<p>Post not found.</p>';
+        return;
+    }
+    
+    try {
+        const posts = await fetchBlogPosts();
+        const post = posts.find(p => p.slug === slug);
+        
+        if (!post) {
+            container.innerHTML = '<p>Post not found.</p>';
+            return;
+        }
+        
+        // Update page title
+        document.title = `${post.title} | Dietitian New York`;
+        
+        // Render post
+        const htmlContent = markdownToHTML(post.content);
+        
+        container.innerHTML = `
+            <article class="blog-post">
+                <div class="blog-post-header">
+                    <div class="blog-post-meta">
+                        <span class="blog-date">${formatDate(post.date)}</span>
+                        <span class="blog-category">${post.category}</span>
+                    </div>
+                    <h1 class="blog-post-title">${post.title}</h1>
                 </div>
-                <h1 class="blog-post-title">${post.title}</h1>
-            </div>
-            <div class="blog-post-body">
-                ${htmlContent}
-            </div>
-            <div class="blog-post-footer">
-                <a href="blog.html" class="back-to-blog">← Back to All Posts</a>
-            </div>
-        </article>
-    `;
+                <div class="blog-post-body">
+                    ${htmlContent}
+                </div>
+                <div class="blog-post-footer">
+                    <a href="blog.html" class="back-to-blog">← Back to All Posts</a>
+                </div>
+            </article>
+        `;
+    } catch (error) {
+        console.error('Error loading blog post:', error);
+        container.innerHTML = '<p>Unable to load blog post at this time. Please try again later.</p>';
+    }
 }
 
 // Render blog preview on homepage
@@ -264,47 +276,63 @@ async function renderBlogPreview() {
     const container = document.getElementById('blog-preview');
     if (!container) return;
     
-    const posts = await fetchBlogPosts();
-    const recentPosts = posts.slice(0, 3); // Show 3 most recent
-    
-    if (recentPosts.length === 0) {
-        container.style.display = 'none';
-        return;
-    }
-    
-    container.innerHTML = `
-        <div class="blog-preview-grid">
-            ${recentPosts.map(post => `
-                <div class="blog-preview-card">
-                    <div class="blog-preview-meta">
-                        <span class="blog-date">${formatDate(post.date)}</span>
-                        <span class="blog-category">${post.category}</span>
+    try {
+        const posts = await fetchBlogPosts();
+        const recentPosts = posts.slice(0, 3); // Show 3 most recent
+        
+        if (recentPosts.length === 0) {
+            // Hide the entire blog preview section if no posts
+            const section = container.closest('.blog-preview-section');
+            if (section) {
+                section.style.display = 'none';
+            }
+            return;
+        }
+        
+        container.innerHTML = `
+            <div class="blog-preview-grid">
+                ${recentPosts.map(post => `
+                    <div class="blog-preview-card">
+                        <div class="blog-preview-meta">
+                            <span class="blog-date">${formatDate(post.date)}</span>
+                            <span class="blog-category">${post.category}</span>
+                        </div>
+                        <h3 class="blog-preview-title">
+                            <a href="blog-post.html?slug=${post.slug}">${post.title}</a>
+                        </h3>
+                        <p class="blog-preview-excerpt">${post.excerpt}</p>
+                        <a href="blog-post.html?slug=${post.slug}" class="blog-preview-link">Read More →</a>
                     </div>
-                    <h3 class="blog-preview-title">
-                        <a href="blog-post.html?slug=${post.slug}">${post.title}</a>
-                    </h3>
-                    <p class="blog-preview-excerpt">${post.excerpt}</p>
-                    <a href="blog-post.html?slug=${post.slug}" class="blog-preview-link">Read More →</a>
-                </div>
-            `).join('')}
-        </div>
-        <div class="blog-preview-cta">
-            <a href="blog.html" class="cta-secondary">View All Blog Posts</a>
-        </div>
-    `;
+                `).join('')}
+            </div>
+            <div class="blog-preview-cta">
+                <a href="blog.html" class="cta-secondary">View All Blog Posts</a>
+            </div>
+        `;
+    } catch (error) {
+        // Silently hide blog section if there's an error
+        console.error('Error loading blog preview:', error);
+        const section = container.closest('.blog-preview-section');
+        if (section) {
+            section.style.display = 'none';
+        }
+    }
 }
 
 // Initialize based on current page
 document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById('blog-posts')) {
-        // Blog listing page
-        renderBlogListing();
-    } else if (document.getElementById('blog-post-content')) {
-        // Blog post detail page
-        renderBlogPost();
-    } else if (document.getElementById('blog-preview')) {
-        // Homepage preview
-        renderBlogPreview();
-    }
+    // Add a small delay to ensure page is fully loaded
+    setTimeout(() => {
+        if (document.getElementById('blog-posts')) {
+            // Blog listing page
+            renderBlogListing();
+        } else if (document.getElementById('blog-post-content')) {
+            // Blog post detail page
+            renderBlogPost();
+        } else if (document.getElementById('blog-preview')) {
+            // Homepage preview
+            renderBlogPreview();
+        }
+    }, 100);
 });
 
